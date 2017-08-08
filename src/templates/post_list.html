@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="col-sm-6 col-sm-offset-3">
+
+<h1> {{ title }}</h1>
+
+{% for instance in object_list %}
+<div class="row">
+
+  <div class="col-sm-12">
+    <div class="thumbnail">
+	{% if instance.image %}
+         <img src='{{ instance.image.url }}' class='img-responsive' />
+	{% endif %}
+      <div class="caption">
+        <h3><a href='{{ instance.get_absolute_url }}'>{{instance.title}}</a> <small>{{instance.timestamp | timesince}} ago</small></h3>
+        <p>{% if instance.user.get_full_name %} Author: {{ instance.user.get_full_name }} {% endif %} </p>
+
+        <p>{{instance.content|linebreaks|truncatechars:120}}</p>
+        <p><a href='{{ instance.get_absolute_url }}' class="btn btn-primary" role="button">View</a> </p>
+      </div>
+    </div>
+  </div>
+  </hr>
+  </div>
+
+{% endfor %}
+<div class="pagination">
+    <span class="step-links">
+        {% if object_list.has_previous %}
+            <a href="?{{page_request_var}}={{ object_list.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+        </span>
+
+        {% if object_list.has_next %}
+            <a href="?{{page_request_var}}={{ object_list.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+</div>
+
+{% endblock content %}
